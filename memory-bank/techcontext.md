@@ -17,7 +17,9 @@
 
 ## Comunicación entre front-end y back-end
 
-La pantalla solicita `GET /api/metrics` mediante una ruta relativa y calcula los KPI y los datos mensuales en el front-end. En desarrollo, Vite reenvía las solicitudes que empiezan por `/api` a `http://backend:8000`. El hostname `backend` corresponde a la red interna de Compose; no es la URL que debe usar directamente el navegador.
+La pantalla solicita `GET /api/metrics` y calcula los KPI y los datos mensuales en el front-end. Anteponer un origen explícito requiere definir `VITE_API_BASE_URL` en `frontend/.env` con la URL del backend accesible desde el navegador, sin `/api` ni barra final. En Codespaces, usa la URL pública del puerto 8000. Vite necesita reiniciarse tras cambiar el archivo; una compilación necesita regenerarse. Las variables `VITE_*` son públicas y no deben contener secretos.
+
+Si la variable está vacía o ausente, la solicitud es relativa. En el modo predeterminado de Compose, Vite reenvía las solicitudes que empiezan por `/api` a `http://backend:8000`, sin exigir una URL explícita. El hostname `backend` corresponde a la red interna de Compose; no es la URL que debe usar directamente el navegador. Antes de verificar la conexión, confirma el modo de ejecución y la configuración necesaria según [AGENTS.md](../AGENTS.md).
 
 El modelo de movimiento incluye fecha, importe, tipo de operación, categoría y tipo de negocio. Referencias: [frontend/src/App.tsx](../frontend/src/App.tsx), [frontend/vite.config.ts](../frontend/vite.config.ts), [backend/app/routes.py](../backend/app/routes.py).
 

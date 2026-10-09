@@ -18,6 +18,16 @@ Este proyecto es un dashboard de métricas financieras. La interfaz muestra ingr
 
 ## 3. Comandos
 
+Antes de iniciar los servicios o verificar la conexión con el backend, comprueba la configuración de entorno del front-end. Si el entorno requiere una URL explícita del backend, debe existir `frontend/.env` con `VITE_API_BASE_URL` definida:
+
+```dotenv
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+Usa el origen del backend accesible desde el navegador (en Codespaces, la URL pública del puerto 8000), sin `/api` ni barra final: la pantalla añade `/api/metrics`. No uses `http://backend:8000`, que solo es accesible desde la red interna de Compose. Si falta el archivo o la variable en un entorno que los necesita, solicita su configuración antes de continuar y registra la verificación como bloqueada por configuración, no como un fallo del backend. No sobrescribas un archivo de entorno existente ni incluyas secretos en variables `VITE_*`, que son públicas en el navegador. Reinicia Vite después de modificar el archivo; si verificas una compilación, vuelve a compilar.
+
+En el modo predeterminado de Compose, `VITE_API_BASE_URL` puede estar vacía o ausente porque Vite utiliza el proxy de `/api`. Confirma qué modo se está verificando antes de exigir una URL explícita. Referencias: [frontend/src/App.tsx](frontend/src/App.tsx), [frontend/vite.config.ts](frontend/vite.config.ts), [README.es.md](README.es.md).
+
 Ejecuta desde la raíz del repositorio:
 
 ```bash
@@ -38,7 +48,7 @@ El front-end se publica en el puerto `5173`, la API en `8000` y el puerto de dep
 ## 4. Convenciones
 
 - Mantén los cálculos financieros en funciones de [frontend/src/lib/financial-utils.ts](frontend/src/lib/financial-utils.ts); los componentes deben presentar los datos recibidos, no duplicar las fórmulas.
-- Llama a la API desde el navegador usando la ruta relativa `/api`. Vite reenvía esas solicitudes a `http://backend:8000`; ese hostname es para la red de Compose, no una URL del navegador. Referencias: [frontend/src/App.tsx](frontend/src/App.tsx), [frontend/vite.config.ts](frontend/vite.config.ts).
+- Por defecto, llama a la API desde el navegador usando la ruta relativa `/api`. Vite reenvía esas solicitudes a `http://backend:8000`; ese hostname es para la red de Compose, no una URL del navegador. Para un backend con origen explícito, configura `VITE_API_BASE_URL` en `frontend/.env` como se indica en la sección de comandos. Referencias: [frontend/src/App.tsx](frontend/src/App.tsx), [frontend/vite.config.ts](frontend/vite.config.ts).
 - Conserva los contratos explícitos: tipos de movimiento en [frontend/src/lib/financial-types.ts](frontend/src/lib/financial-types.ts), y modelos de respuesta, tipos permitidos y límites de parámetros en [backend/app/routes.py](backend/app/routes.py). Si cambia el contrato, actualiza ambos lados.
 - Sigue el estilo visible del lenguaje: nombres `snake_case` en Python y `camelCase` para funciones TypeScript; los tipos TypeScript usan `PascalCase`.
 

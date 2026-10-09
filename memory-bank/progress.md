@@ -21,6 +21,7 @@ Estas rutas existen en el backend, pero salvo `/api/metrics`, no son consultadas
 
 ## Limitaciones actuales
 
+- Se ha documentado en [AGENTS.md](../AGENTS.md) la comprobación previa de `frontend/.env` y `VITE_API_BASE_URL` cuando se necesita un origen explícito del backend. El proxy de Compose sigue siendo el modo predeterminado sin esa variable. Esta actualización de instrucciones no verifica por sí misma la conectividad del entorno.
 - Los datos son simulados en el backend y se generan en cada solicitud; no representan transacciones reales ni persistidas.
 - El encabezado de la interfaz está fijado en `2024 - Full Year`, mientras que los años de los movimientos dependen de la fecha actual. El rótulo no garantiza que los datos sean de 2024 ni que correspondan a ese año completo.
 - La interfaz no ofrece controles de filtro ni presenta las funciones de resumen, comparación, alertas, categorías principales o segmentación B2B/B2C que sí tienen endpoints en el backend.
