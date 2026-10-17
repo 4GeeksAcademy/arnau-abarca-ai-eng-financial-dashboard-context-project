@@ -19,6 +19,20 @@ Referencias: [frontend/src/App.tsx](../frontend/src/App.tsx), [frontend/src/lib/
 
 Estas rutas existen en el backend, pero salvo `/api/metrics`, no son consultadas por la pantalla actual. Referencias: [backend/app/routes.py](../backend/app/routes.py), [frontend/src/App.tsx](../frontend/src/App.tsx).
 
+## Mejoras recientes
+
+### Skills documentadas e implementación
+
+- La skill `accessibility` está documentada en `.agents/skills/accessibility/` y sus recomendaciones se aplicaron al front-end: título de página descriptivo, anuncios accesibles de carga y error, alternativas tabulares para lectores de pantalla en los gráficos y respeto de `prefers-reduced-motion`. Los mensajes de error quedaron alineados con el idioma inglés de la interfaz.
+- La skill `vercel-react-best-practices` está documentada en `.agents/skills/vercel-react-best-practices/`. Se aplicó carga diferida de los gráficos con `React.lazy` y `Suspense`, además de deduplicación de la petición de métricas mediante una promesa compartida que se reinicia si falla. No se instaló SWR: el acceso al registry de npm falló por DNS (`EAI_AGAIN`).
+- La skill interna `financial-dashboard-testing` está documentada en `.agents/skills/financial-dashboard-testing/SKILL.md`. Define criterios para pruebas de cálculos, fechas, filtros y contratos API, alertas e integración de `App`; todavía no se han añadido pruebas nuevas como resultado de esa skill.
+
+### Verificación registrada
+
+- Después de los cambios de accesibilidad y rendimiento, `npm run build`, `npm test` y `npm run lint` del front-end pasaron; las pruebas reportaron 5 casos exitosos.
+- Tras la carga diferida, el chunk de entrada pasó de 585,55 kB a 188,01 kB en el build observado. Recharts quedó en chunks separados.
+- La auditoría Lighthouse de accesibilidad no se pudo ejecutar porque npm no pudo resolver `registry.npmjs.org`; no se considera una verificación completada.
+
 ## Limitaciones actuales
 
 - Se ha documentado en [AGENTS.md](../AGENTS.md) la comprobación previa de `frontend/.env` y `VITE_API_BASE_URL` cuando se necesita un origen explícito del backend. El proxy de Compose sigue siendo el modo predeterminado sin esa variable. Esta actualización de instrucciones no verifica por sí misma la conectividad del entorno.
